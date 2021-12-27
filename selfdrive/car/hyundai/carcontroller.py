@@ -81,8 +81,8 @@ class CarController():
 
     self.turning_signal_timer = 0
     self.cut_timer = 0
-    self.longcontrol = CP.openpilotLongitudinalControl
-    self.scc_live = not CP.radarOffCan 
+    self.longcontrol = False
+    self.scc_live = False
 
     self.turning_indicator_alert = False
     self.emsType = CP.emsType
@@ -308,7 +308,7 @@ class CarController():
     # scc smoother
     self.scc_smoother.update(enabled, can_sends, self.packer, CC, CS, frame, controls)
 
-    if self.longcontrol and (CS.cruiseState_enabled and CS.scc_bus or CS.CP.radarDisablePossible or self.radarDisableActivated and self.counter_init):
+    if self.longcontrol and (CS.cruiseState_enabled and CS.scc_bus or CS.CP.radarDisablePossible or self.radarDisableActivated and self.counter_init) and not self.ldws_opt:
       if frame % 2 == 0:
         
         stopping = controls.LoC.long_control_state == LongCtrlState.stopping
@@ -450,17 +450,17 @@ class CarController():
         if self.emsType == 0:
           print("Please add a car parameter called ret.emsType = (your EMS type) in interface.py : EMS_366 = 1 : EMS_11 = 2 : E_EMS11 = 3")
 
-      # SPAS12 20Hz
-      if (frame % 5) == 0:
-        can_sends.append(create_spas12(CS.mdps_bus))
+      # # SPAS12 20Hz
+      # if (frame % 5) == 0:
+      #   can_sends.append(create_spas12(CS.mdps_bus))
 
-      # 5 Hz ACC options
-      if frame % 20 == 0 and CS.CP.radarDisablePossible:
-        can_sends.extend(create_acc_opt(self.packer, int(frame / 2)))
+      # # 5 Hz ACC options
+      # if frame % 20 == 0 and CS.CP.radarDisablePossible:
+      #   can_sends.extend(create_acc_opt(self.packer, int(frame / 2)))
 
-      # 2 Hz front radar options
-      if frame % 50 == 0 and CS.CP.radarDisablePossible:
-        can_sends.append(create_frt_radar_opt(self.packer))
+      # # 2 Hz front radar options
+      # if frame % 50 == 0 and CS.CP.radarDisablePossible:
+      #   can_sends.append(create_frt_radar_opt(self.packer))
 
       self.spas_active_last = spas_active
       self.DTQL = abs(CS.out.steeringWheelTorque)
