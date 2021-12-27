@@ -418,7 +418,7 @@ class CarState(CarStateBase):
       ("ComfortBandLower", "SCC14", 0),
       ]
 
-    if CP.sccBus == 0 and CP.pcmCruise and not CP.radarDisablePossible:
+    if CP.sccBus == 0 and CP.pcmCruise and not CP.radarDisablePossible and not CP.RadarOffCan:
       checks += [
         ("SCC11", 50),
         ("SCC12", 50),
