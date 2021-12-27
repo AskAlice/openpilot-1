@@ -224,7 +224,7 @@ class CarController():
     # self.prev_scc_cnt = CS.scc11["AliveCounterACC"]
     # self.scc_update_frame = frame
 
-    self.prev_scc_cnt = CS.scc11["AliveCounterACC"]
+    self.prev_scc_cnt = 0 if not self.scc_live else CS.scc11["AliveCounterACC"]
 
     self.lkas11_cnt = (self.lkas11_cnt + 1) % 0x10
 
