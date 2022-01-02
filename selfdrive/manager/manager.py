@@ -183,7 +183,7 @@ def manager_thread():
   started_prev = False
   sm = messaging.SubMaster(['deviceState'])
   pm = messaging.PubMaster(['managerState'])
-
+  count = 0
   while True:
     sm.update()
     not_run = ignore[:]
@@ -204,9 +204,10 @@ def manager_thread():
 
     running = ' '.join("%s%s\u001b[0m" % ("\u001b[32m" if p.proc.is_alive() else "\u001b[31m", p.name)
                        for p in managed_processes.values() if p.proc)
-    # print(running)
-    cloudlog.debug(running)
-
+    if count % 5 == 0:
+      print(running)
+      cloudlog.debug(running)
+    count += 1
     # send managerState
     msg = messaging.new_message('managerState')
     msg.managerState.processes = [p.get_process_state_msg() for p in managed_processes.values()]
