@@ -31,6 +31,6 @@ def bind_extra(**kwargs) -> None:
     sentry_sdk.set_tag(k, v)
 
 def init() -> None:
-  sentry_sdk.init("https://ea01cb7973b74884a015cef3f7829d86@o409002.ingest.sentry.io/5280713",
+  sentry_sdk.init("https://b3d790c55d8b4ffdb2f0b50bb95148e7@o409002.ingest.sentry.io/5585235",
                   default_integrations=False, integrations=[ThreadingIntegration(propagate_hub=True)],
                   release=get_version())
