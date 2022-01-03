@@ -5,7 +5,8 @@ from opendbc.can.parser import CANParser
 from opendbc.can.can_define import CANDefine
 from selfdrive.config import Conversions as CV
 from common.params import Params
-
+from selfdrive.swaglog import cloudlog
+import json
 GearShifter = car.CarState.GearShifter
 
 
@@ -572,7 +573,8 @@ class CarState(CarStateBase):
       checks += [
         ("Navi_HU", 5)
       ]
-
+    cloudlog.debug({"CP Signals": json.dumps(signals)})
+    cloudlog.debug({"CP Checks": json.dumps(checks)})
     return CANParser(DBC[CP.carFingerprint]["pt"], signals, checks, 0, enforce_checks=False)
 
   @staticmethod
@@ -670,6 +672,8 @@ class CarState(CarStateBase):
         ("SCC11", 50),
         ("SCC12", 50),
       ]
+    cloudlog.debug({"CP2 Signals": json.dumps(signals)})
+    cloudlog.debug({"CP2 Checks": json.dumps(checks)})
     return CANParser(DBC[CP.carFingerprint]["pt"], signals, checks, 1, enforce_checks=False)
 
   @staticmethod
@@ -753,5 +757,6 @@ class CarState(CarStateBase):
         ("SCC11", 50),
         ("SCC12", 50),
       ]
-
+    cloudlog.debug({"Cam Signals": json.dumps(signals)})
+    cloudlog.debug({"Cam Checks": json.dumps(checks)})
     return CANParser(DBC[CP.carFingerprint]["pt"], signals, checks, 2, enforce_checks=False)
