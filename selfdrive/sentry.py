@@ -15,9 +15,9 @@ import traceback
 
 class SentryProject(Enum):
   # python project
-  SELFDRIVE = "https://6f3c7076c1e14b2aa10f5dde6dda0cc4@o33823.ingest.sentry.io/77924"
+  SELFDRIVE = "https://7616275638ec498c919b93eddbbea98b@o409002.ingest.sentry.io/6236467"
   # native project
-  SELFDRIVE_NATIVE = "https://3e4b586ed21a4479ad5d85083b639bc6@o33823.ingest.sentry.io/157615"
+  SELFDRIVE_NATIVE = "https://ae0df0907235456c9f03e378a588bacf@o409002.ingest.sentry.io/6236468"
 
 
 def report_tombstone(fn: str, message: str, contents: str) -> None:
