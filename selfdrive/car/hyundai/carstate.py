@@ -141,9 +141,9 @@ class CarState(CarStateBase):
     # cruise state
     if self.CP.radarDisable:
       # These are not used for engage/disengage since openpilot keeps track of state using the buttons
-      ret.cruiseState.available = cp.vl["TCS13"]["AEB_EQUIP"] == 1
-      ret.cruiseState.enabled = cp.vl["CLU13"]["CF_Clu_DrivingModeSwi"] ==1
-      ret.cruiseState.standstill = False
+      ret.cruiseState.enabled =  cp.vl["TCS13"]["AEB_EQUIP"] != 0 # cp.vl["CLU13"]["CF_Clu_DrivingModeSwi"] ==1
+      ret.cruiseState.available = cp.vl["CLU11"]["CF_Clu_CruiseSwMain"] # cp.vl["TCS13"]["AEB_EQUIP"] == 1
+      ret.cruiseState.standstill = cp.vl["TCS13"]["StandStill"]  # False
       ret.cruiseState.enabledAcc = ret.cruiseState.enabled
       print("TCS13.ACC_REQ", cp.vl["TCS13"]["ACC_REQ"])
       print("TCS13.ACCEnable", cp.vl["TCS13"]["ACCEnable"])
@@ -154,11 +154,11 @@ class CarState(CarStateBase):
       print("LVR12.CF_Lvr_CruiseSet", cp.vl["LVR12"]["CF_Lvr_CruiseSet"])
       print("EMS16.CRUISE_LAMP_M", cp.vl["EMS16"]["CRUISE_LAMP_M"])
     else:
-      ret.cruiseState.enabled = (cp_scc.vl["SCC12"]["ACCMode"] != 0) if not (self.radarDisable) else \
+      ret.cruiseState.enabled = (cp_scc.vl["SCC12"]["ACCMode"] != 0) if not (self.CP.radarDisable) else \
                                       cp.vl["CLU13"]["CF_Clu_DrivingModeSwi"] != 0
-      ret.cruiseState.available = (cp_scc.vl["SCC11"]["MainMode_ACC"] != 0) if not (self.radarDisable) else \
+      ret.cruiseState.available = (cp_scc.vl["SCC11"]["MainMode_ACC"] != 0) if not (self.CP.radarDisable) else \
                                       cp.vl["TCS13"]["AEB_EQUIP"] != 0
-      ret.cruiseState.standstill = cp_scc.vl["SCC11"]["SCCInfoDisplay"] == 4. if not (self.radarDisable) else cp.vl["TCS13"]["StandStill"] 
+      ret.cruiseState.standstill = cp_scc.vl["SCC11"]["SCCInfoDisplay"] == 4. if not (self.CP.radarDisable) else cp.vl["TCS13"]["StandStill"] 
 
       ret.cruiseState.enabledAcc = ret.cruiseState.enabled
 
