@@ -315,7 +315,7 @@ class CarState(CarStateBase):
       ("CF_VSM_Avail", "TCS13", 0),
       ("StandStill", "TCS13", 0),
       ("PBRAKE_ACT", "TCS13", 0),
-      ("ABS_EQUIP", "TCS13", 0),
+      ("AEB_EQUIP", "TCS13", 0),
 
       ("ESC_Off_Step", "TCS15", 0),
       ("AVH_LAMP", "TCS15", 0),
