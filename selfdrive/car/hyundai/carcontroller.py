@@ -231,7 +231,7 @@ class CarController():
 
     if self.longcontrol and (CS.cruiseState_enabled or CS.CP.radarDisable or CS.CP.radarOffCan):
       if frame % 2 == 0:
-        aReqValue = actuators.gas - actuators.brake
+        aReqValue = actuators.gas - actuators.brake if enabled and CS.out.gasPressed else 0
         controls.aReqValue = aReqValue
 
         if aReqValue < controls.aReqValueMin:
