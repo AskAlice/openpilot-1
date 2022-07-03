@@ -148,14 +148,14 @@ class CarController():
     if frame == 0:  # initialize counts from last received count signals
       self.lkas11_cnt = CS.lkas11["CF_Lkas_MsgCount"]
       
-    self.prev_scc_cnt = CS.scc11["AliveCounterACC"] if not self.ldws_opt else 0
+    self.prev_scc_cnt = CS.scc11["AliveCounterACC"] if not self.ldws_opt and not CS.CP.radarDisable else 0
 
     self.lkas11_cnt = (self.lkas11_cnt + 1) % 0x10
 
     # tester present - w/ no response (keeps radar disabled)
-    if CS.CP.radarDisable:
-      if (frame % 100) == 0:
-        can_sends.append([0x7D0, 0, b"\x02\x3E\x80\x00\x00\x00\x00\x00", 0])
+    # if CS.CP.radarDisable:
+    #   if (frame % 100) == 0:
+    #     can_sends.append([0x7D0, 0, b"\x02\x3E\x80\x00\x00\x00\x00\x00", 0])
 
     can_sends.append(create_lkas11(self.packer, frame, self.car_fingerprint, apply_steer, lkas_active,
                                    CS.lkas11, sys_warning, sys_state, enabled, left_lane, right_lane,
