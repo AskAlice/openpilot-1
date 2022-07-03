@@ -164,7 +164,7 @@ def create_acc_commands(packer, enabled, accel, jerk, idx, lead_visible, lead_di
     "aReqRaw": accel if enabled else 0,
     "aReqValue": accel if enabled else 0, # stock ramps up and down respecting jerk limit until it reaches aReqRaw
     "CR_VSM_Alive": idx % 0xF,
-    "aReqMax": accel if enabled and gaspressed else 0,
+   
     "CF_VSM_ConfMode": 0,
     "AEB_Failinfo": 0,
     "AEB_Status": 0,
