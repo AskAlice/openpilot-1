@@ -145,8 +145,14 @@ class CarState(CarStateBase):
       ret.cruiseState.enabled = cp.vl["CLU13"]["CF_Clu_DrivingModeSwi"] ==1
       ret.cruiseState.standstill = False
       ret.cruiseState.enabledAcc = ret.cruiseState.enabled
-      print("cruiseState.enabled", cp.vl["TCS13"]["ACC_REQ"])
-      print("cruiseState.available", cp.vl["TCS13"]["ACCEnable"])
+      print("TCS13.ACC_REQ", cp.vl["TCS13"]["ACC_REQ"])
+      print("TCS13.ACCEnable", cp.vl["TCS13"]["ACCEnable"])
+      print("CLU11.CF_Clu_CruiseSwMain", cp.vl["CLU11"]["CF_Clu_CruiseSwMain"])
+      print("TCS13.ACCEnable", cp.vl["TCS13"]["ACCEnable"])
+      print("TCS13.ACC_REQ", cp.vl["TCS13"]["ACC_REQ"])
+      print("TCS13.ACCEnable", cp.vl["TCS13"]["ACCEnable"])
+      print("LVR12.CF_Lvr_CruiseSet", cp.vl["LVR12"]["CF_Lvr_CruiseSet"])
+      print("EMS16.CRUISE_LAMP_M", cp.vl["EMS16"]["CRUISE_LAMP_M"])
     else:
       ret.cruiseState.enabled = (cp_scc.vl["SCC12"]["ACCMode"] != 0) if not (self.radarDisable) else \
                                       cp.vl["CLU13"]["CF_Clu_DrivingModeSwi"] != 0
