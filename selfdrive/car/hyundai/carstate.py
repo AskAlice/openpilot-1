@@ -141,18 +141,18 @@ class CarState(CarStateBase):
     # cruise state
     if self.CP.radarDisable:
       # These are not used for engage/disengage since openpilot keeps track of state using the buttons
-      ret.cruiseState.available = cp.vl["TCS13"]["ACCEnable"] == 0
-      ret.cruiseState.enabled = cp.vl["TCS13"]["ACC_REQ"] != 3
+      ret.cruiseState.available = cp.vl["TCS13"]["AEB_EQUIP"] == 1
+      ret.cruiseState.enabled = cp.vl["CLU11"]["CF_Clu_DrivingModeSwi"] ==1
       ret.cruiseState.standstill = False
       ret.cruiseState.enabledAcc = ret.cruiseState.enabled
       print("cruiseState.enabled", cp.vl["TCS13"]["ACC_REQ"])
       print("cruiseState.available", cp.vl["TCS13"]["ACCEnable"])
     else:
       ret.cruiseState.enabled = (cp_scc.vl["SCC12"]["ACCMode"] != 0) if not (self.radarDisable) else \
-                                      cp.vl["LVR12"]["CF_Lvr_CruiseSet"] != 0
+                                      cp.vl["LVR12"]["CF_Clu_DrivingModeSwi"] != 0
       ret.cruiseState.available = (cp_scc.vl["SCC11"]["MainMode_ACC"] != 0) if not (self.radarDisable) else \
-                                      cp.vl["EMS16"]["CRUISE_LAMP_M"] != 0
-      ret.cruiseState.standstill = cp_scc.vl["SCC11"]["SCCInfoDisplay"] == 4. if not (self.radarDisable) else False
+                                      cp.vl["TCS13"]["AEB_EQUIP"] != 0
+      ret.cruiseState.standstill = cp_scc.vl["SCC11"]["SCCInfoDisplay"] == 4. if not (self.radarDisable) else cp.vl["TCS13"]["StandStill"] 
 
       ret.cruiseState.enabledAcc = ret.cruiseState.enabled
 
@@ -305,7 +305,8 @@ class CarState(CarStateBase):
       ("CF_Clu_CluInfo", "CLU11", 0),
       ("CF_Clu_AmpInfo", "CLU11", 0),
       ("CF_Clu_AliveCnt1", "CLU11", 0),
-
+      ("CF_Clu_DrivingModeSwi", "CLU11", 0),
+  
       ("ACCEnable", "TCS13", 0),
       ("ACC_REQ", "TCS13", 0),
       ("BrakeLight", "TCS13", 0),
@@ -314,6 +315,7 @@ class CarState(CarStateBase):
       ("CF_VSM_Avail", "TCS13", 0),
       ("StandStill", "TCS13", 0),
       ("PBRAKE_ACT", "TCS13", 0),
+      ("ABS_EQUIP", "TCS13", 0),
 
       ("ESC_Off_Step", "TCS15", 0),
       ("AVH_LAMP", "TCS15", 0),
