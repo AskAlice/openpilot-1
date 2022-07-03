@@ -163,7 +163,7 @@ class CarState(CarStateBase):
       ret.cruiseState.enabledAcc = ret.cruiseState.enabled
 
       if ret.cruiseState.enabled:
-        ret.cruiseState.speed = cp_scc.vl["SCC11"]["VSetDis"] * self.speed_conv_to_ms if not (self.radarDisable) else \
+        ret.cruiseState.speed = cp_scc.vl["SCC11"]["VSetDis"] * self.speed_conv_to_ms if not (self.CP.radarDisable) else \
                                          cp.vl["LVR12"]["CF_Lvr_CruiseSet"] * self.speed_conv_to_ms
       else:
         ret.cruiseState.speed = 0
