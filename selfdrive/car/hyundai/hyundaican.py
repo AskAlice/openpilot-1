@@ -142,16 +142,34 @@ def create_acc_commands(packer, enabled, accel, jerk, idx, lead_visible, lead_di
     "Navi_SCC_Camera_Act": 0,
     "Navi_SCC_Camera_Status": 0,
     "DriverAlertDisplay": 1 if warning else 0,
+    "ACC_ObjLatPos":0,
+    "ACC_ObjRelSpd":0,
   }
   commands.append(packer.make_can_msg("SCC11", 0, scc11_values))
-  if not radarDisable:
-    scc12_values = copy.copy(scc12)
+ # if not radarDisable:
+  #  scc12_values = copy.copy(scc12)
   scc12_values = {
+    "CF_VSM_Prefill": 0,
+    "CF_VSM_DecCmdAct": 0,
+    "CF_VSM_HBACmd": 0,
+    "CF_VSM_Warn": 0,
+    "CF_VSM_Stat": 0,
+    "CF_VSM_BeltCmd": 0,
+    "CR_VSM_DecCmd": 0,
+    "ACCFailInfo": 0,
+    "TakeOverReq": 0,
+    "PreFill": 0,
     "ACCMode": 2 if enabled and gaspressed else 1 if enabled else 0,
     "StopReq": 1 if enabled and stopping and not gaspressed else 0,
     "aReqRaw": accel if enabled else 0,
     "aReqValue": accel if enabled else 0, # stock ramps up and down respecting jerk limit until it reaches aReqRaw
     "CR_VSM_Alive": idx % 0xF,
+    "aReqMax": accel if enabled and gaspressed else scc12["aReqMax"],
+    "CF_VSM_ConfMode": 0,
+    "AEB_Failinfo": 0,
+    "AEB_Status": 0,
+    "AEB_CmdAct": 0,
+    "AEB_StopReq": 0,
   }
   scc12_dat = packer.make_can_msg("SCC12", 0, scc12_values)[2]
   scc12_values["CR_VSM_ChkSum"] = 0x10 - sum(sum(divmod(i, 16)) for i in scc12_dat) % 0x10
@@ -159,8 +177,8 @@ def create_acc_commands(packer, enabled, accel, jerk, idx, lead_visible, lead_di
 
   if scc14 or radarDisable:
     scc14_values = {
-      "ComfortBandUpper": 0.0, # stock usually is 0 but sometimes uses higher values
-      "ComfortBandLower": 0.0, # stock usually is 0 but sometimes uses higher values
+      "ComfortBandUpper": 0.24, # stock usually is 0 but sometimes uses higher values
+      "ComfortBandLower": 0.24, # stock usually is 0 but sometimes uses higher values
       "JerkUpperLimit": max(jerk, 1.0) if (enabled and not stopping) else 0, # stock usually is 1.0 but sometimes uses higher values
       "JerkLowerLimit": max(-jerk, 1.0) if enabled else 0, # stock usually is 0.5 but sometimes uses higher values
       "ACCMode": 2 if enabled and gaspressed else 1 if enabled else 4, # stock will always be 4 instead of 0 after first disengage
@@ -181,7 +199,6 @@ def create_acc_commands(packer, enabled, accel, jerk, idx, lead_visible, lead_di
     fca11_dat = packer.make_can_msg("FCA11", 0, fca11_values)[2]
     fca11_values["CR_FCA_ChkSum"] = 0x10 - sum(sum(divmod(i, 16)) for i in fca11_dat) % 0x10
     commands.append(packer.make_can_msg("FCA11", 0, fca11_values))
-
   return commands
 
 def create_acc_opt(packer, radarDisable):

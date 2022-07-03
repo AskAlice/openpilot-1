@@ -639,7 +639,7 @@ class CarState(CarStateBase):
         ("SAS11", 100)
       ]
 
-    if CP.sccBus == 1:
+    if CP.sccBus == 1 and CP.carFingerprint not in FEATURES["use_scc_emulation"]:
       signals += [
         ("MainMode_ACC", "SCC11"),
         ("SCCInfoDisplay", "SCC11"),
@@ -726,7 +726,7 @@ class CarState(CarStateBase):
     ]
 
 
-    if CP.sccBus == 2:
+    if CP.sccBus == 2 and CP.carFingerprint not in FEATURES["use_scc_emulation"]:
       signals += [
         ("MainMode_ACC", "SCC11"),
         ("SCCInfoDisplay", "SCC11"),

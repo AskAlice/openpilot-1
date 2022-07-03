@@ -25,7 +25,7 @@ def get_radar_can_parser(CP):
         ("REL_ACCEL", msg),
         ("REL_SPEED", msg),
       ]
-      checks += [(msg, 50)]
+    #  checks += [(msg, 50)]
     return CANParser('hyundai_kia_mando_front_radar', signals, checks, 1)
 
   else:
@@ -38,7 +38,7 @@ def get_radar_can_parser(CP):
       ("ACC_ObjRelSpd", "SCC11"),
     ]
     checks = [
-      ("SCC11", 50),
+     # ("SCC11", 50),
     ]
     return CANParser(DBC[CP.carFingerprint]['pt'], signals, checks, CP.sccBus)
 
@@ -51,7 +51,7 @@ class RadarInterface(RadarInterfaceBase):
     self.trigger_msg = 0x420 if not self.new_radar else RADAR_START_ADDR + RADAR_MSG_COUNT - 1
     self.track_id = 0
 
-    self.radar_off_can = CP.radarOffCan or CP.radarDisable
+    self.radar_off_can = CP.radarOffCan or CP.radarDisable or CP.sccBus == -1 or CP.carFingerprint in FEATURES["use_scc_emulation"]
     self.rcp = get_radar_can_parser(CP)
 
   def update(self, can_strings):
