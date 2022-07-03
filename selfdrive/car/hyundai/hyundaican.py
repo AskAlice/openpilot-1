@@ -184,20 +184,20 @@ def create_acc_commands(packer, enabled, accel, jerk, idx, lead_visible, lead_di
       "ObjGap": 0 if not lead_visible else 1 if lead_dist < 25 else 2 if lead_dist < 40 else 3 if lead_dist < 60 else 4 if lead_dist < 80 else 5, # 5: >30, m, 4: 25-30 m, 3: 20-25 m, 2: < 20 m, 0: no lead
     }
     commands.append(packer.make_can_msg("SCC14", 0, scc14_values))
-  if radarDisable:
-    fca11_values = {
-      # seems to count 2,1,0,3,2,1,0,3,2,1,0,3,2,1,0,repeat...
-      # (where first value is aligned to Supplemental_Counter == 0)
-      # test: [(idx % 0xF, -((idx % 0xF) + 2) % 4) for idx in range(0x14)]
-      "CR_FCA_Alive": ((-((idx % 0xF) + 2) % 4) << 2) + 1,
-      "Supplemental_Counter": idx % 0xF,
-      "PAINT1_Status": 1,
-      "FCA_DrvSetStatus": 1,
-      "FCA_Status": 1, # AEB disabled
-    }
-    fca11_dat = packer.make_can_msg("FCA11", 0, fca11_values)[2]
-    fca11_values["CR_FCA_ChkSum"] = 0x10 - sum(sum(divmod(i, 16)) for i in fca11_dat) % 0x10
-    commands.append(packer.make_can_msg("FCA11", 0, fca11_values))
+  # if radarDisable:
+  #   fca11_values = {
+  #     # seems to count 2,1,0,3,2,1,0,3,2,1,0,3,2,1,0,repeat...
+  #     # (where first value is aligned to Supplemental_Counter == 0)
+  #     # test: [(idx % 0xF, -((idx % 0xF) + 2) % 4) for idx in range(0x14)]
+  #     "CR_FCA_Alive": ((-((idx % 0xF) + 2) % 4) << 2) + 1,
+  #     "Supplemental_Counter": idx % 0xF,
+  #     "PAINT1_Status": 1,
+  #     "FCA_DrvSetStatus": 1,
+  #     "FCA_Status": 1, # AEB disabled
+  #   }
+  #   fca11_dat = packer.make_can_msg("FCA11", 0, fca11_values)[2]
+  #   fca11_values["CR_FCA_ChkSum"] = 0x10 - sum(sum(divmod(i, 16)) for i in fca11_dat) % 0x10
+  #   commands.append(packer.make_can_msg("FCA11", 0, fca11_values))
   return commands
 
 def create_acc_opt(packer, radarDisable):
