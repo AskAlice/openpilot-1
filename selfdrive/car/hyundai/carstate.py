@@ -483,18 +483,18 @@ class CarState(CarStateBase):
       ("SAS11", 100),
     ]
 
-    if not CP.openpilotLongitudinalControl and CP.carFingerprint not in (CAMERA_SCC_CAR, NON_SCC_CAR):
-      signals += [
-        ("MainMode_ACC", "SCC11"),
-        ("VSetDis", "SCC11"),
-        ("SCCInfoDisplay", "SCC11"),
-        ("ACC_ObjDist", "SCC11"),
-        ("ACCMode", "SCC12"),
-      ]
-      checks += [
-        ("SCC11", 50),
-        ("SCC12", 50),
-      ]
+    #if not CP.openpilotLongitudinalControl and CP.carFingerprint not in (CAMERA_SCC_CAR, NON_SCC_CAR):
+    #  signals += [
+    #    ("MainMode_ACC", "SCC11"),
+    #    ("VSetDis", "SCC11"),
+    #    ("SCCInfoDisplay", "SCC11"),
+    #    ("ACC_ObjDist", "SCC11"),
+    #    ("ACCMode", "SCC12"),
+    #  ]
+    #  checks += [
+    #    ("SCC11", 50),
+    #    ("SCC12", 50),
+    #:  ]
 
       if CP.carFingerprint in FEATURES["use_fca"]:
         signals += [
