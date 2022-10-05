@@ -492,12 +492,12 @@ class CarState(CarStateBase):
           ("CF_VSM_DecCmdAct", "FCA11"),
         ]
         checks.append(("FCA11", 50))
-      else:
-        signals += [
-          ("AEB_CmdAct", "SCC12"),
-          ("CF_VSM_Warn", "SCC12"),
-          ("CF_VSM_DecCmdAct", "SCC12"),
-        ]
+      #else:
+      #  signals += [
+      #    ("AEB_CmdAct", "SCC12"),
+      #    ("CF_VSM_Warn", "SCC12"),
+      #    ("CF_VSM_DecCmdAct", "SCC12"),
+      #  ]
 
     if not CP.openpilotLongitudinalControl and CP.carFingerprint in NON_SCC_CAR:
       signals += [
