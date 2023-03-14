@@ -59,7 +59,7 @@ class CarState(CarStateBase):
       return self.update_canfd(cp, cp_cam)
 
     ret = car.CarState.new_message()
-    cp_cruise = cp_cam if self.CP.carFingerprint in CAMERA_SCC_CAR else cp
+    cp_cruise = cp_cam if self.CP.carFingerprint in (CAMERA_SCC_CAR, NON_SCC_CAR) else cp
     self.is_metric = cp.vl["CLU11"]["CF_Clu_SPEED_UNIT"] == 0
     speed_conv = CV.KPH_TO_MS if self.is_metric else CV.MPH_TO_MS
 
@@ -107,6 +107,11 @@ class CarState(CarStateBase):
       ret.cruiseState.available = cp.vl["TCS13"]["ACCEnable"] == 0 and self.mainEnabled
       ret.cruiseState.enabled = cp.vl["TCS13"]["ACC_REQ"] == 1
       ret.cruiseState.standstill = False
+    elif self.CP.carFingerprint in NON_SCC_CAR:
+      ret.cruiseState.available = cp.vl['EMS16']['CRUISE_LAMP_M'] != 0
+      ret.cruiseState.enabled = cp.vl["LVR12"]['CF_Lvr_CruiseSet'] != 0
+      ret.cruiseState.speed = cp.vl["LVR12"]["CF_Lvr_CruiseSet"] * speed_conv
+      ret.cruiseState.standstill = False
     else:
       ret.cruiseState.available = cp_cruise.vl["SCC11"]["MainMode_ACC"] == 1
       ret.cruiseState.enabled = cp_cruise.vl["SCC12"]["ACCMode"] != 0
@@ -144,7 +149,7 @@ class CarState(CarStateBase):
 
     ret.gearShifter = self.parse_gear_shifter(self.shifter_values.get(gear))
 
-    if not self.CP.openpilotLongitudinalControl:
+    if not self.CP.openpilotLongitudinalControl and self.CP.carFingerprint not in NON_SCC_CAR:
       aeb_src = "FCA11" if self.CP.flags & HyundaiFlags.USE_FCA.value else "SCC12"
       aeb_sig = "FCA_CmdAct" if self.CP.flags & HyundaiFlags.USE_FCA.value else "AEB_CmdAct"
       aeb_warning = cp_cruise.vl[aeb_src]["CF_VSM_Warn"] != 0
@@ -358,7 +363,7 @@ class CarState(CarStateBase):
       ("SAS11", 100),
     ]
 
-    if not CP.openpilotLongitudinalControl and CP.carFingerprint not in CAMERA_SCC_CAR:
+    if not CP.openpilotLongitudinalControl and CP.carFingerprint not in (CAMERA_SCC_CAR, NON_SCC_CAR):
       signals += [
         ("MainMode_ACC", "SCC11"),
         ("VSetDis", "SCC11"),
@@ -379,11 +384,12 @@ class CarState(CarStateBase):
         ]
         checks.append(("FCA11", 50))
       else:
-        signals += [
-          ("AEB_CmdAct", "SCC12"),
-          ("CF_VSM_Warn", "SCC12"),
-          ("CF_VSM_DecCmdAct", "SCC12"),
-        ]
+        if CP.carFingerprint not in (NON_SCC_CAR):
+          signals += [
+            ("AEB_CmdAct", "SCC12"),
+            ("CF_VSM_Warn", "SCC12"),
+            ("CF_VSM_DecCmdAct", "SCC12"),
+          ]
 
     if CP.enableBsm:
       signals += [
@@ -495,11 +501,12 @@ class CarState(CarStateBase):
         ]
         checks.append(("FCA11", 50))
       else:
-        signals += [
-          ("AEB_CmdAct", "SCC12"),
-          ("CF_VSM_Warn", "SCC12"),
-          ("CF_VSM_DecCmdAct", "SCC12"),
-        ]
+        if CP.carFingerprint not in NON_SCC_CAR:
+          signals += [
+            ("AEB_CmdAct", "SCC12"),
+            ("CF_VSM_Warn", "SCC12"),
+            ("CF_VSM_DecCmdAct", "SCC12"),
+          ]
 
     return CANParser(DBC[CP.carFingerprint]["pt"], signals, checks, 2)
 

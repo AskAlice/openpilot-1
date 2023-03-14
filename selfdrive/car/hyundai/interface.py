@@ -166,7 +166,8 @@ class CarInterface(CarInterfaceBase):
       ret.mass = 1825. + STD_CARGO_KG
       ret.wheelbase = 2.78
       ret.steerRatio = 14.4 * 1.15   # 15% higher at the center seems reasonable
-    elif candidate == CAR.KIA_FORTE:
+    elif candidate in (CAR.KIA_FORTE, CAR. KIA_FORTE_2019_NON_SCC, CAR.KIA_FORTE_2021_NON_SCC):
+      ret.lateralTuning.pid.kf = 0.00005
       ret.mass = 3558. * CV.LB_TO_KG
       ret.wheelbase = 2.80
       ret.steerRatio = 13.75
@@ -279,7 +280,6 @@ class CarInterface(CarInterfaceBase):
         ret.safetyConfigs = [get_safety_config(car.CarParams.SafetyModel.hyundaiLegacy)]
       else:
         ret.safetyConfigs = [get_safety_config(car.CarParams.SafetyModel.hyundai, 0)]
-
       if candidate in CAMERA_SCC_CAR:
         ret.safetyConfigs[0].safetyParam |= Panda.FLAG_HYUNDAI_CAMERA_SCC
 
@@ -300,7 +300,8 @@ class CarInterface(CarInterfaceBase):
     if candidate in (CAR.KONA, CAR.KONA_EV, CAR.KONA_HEV, CAR.KONA_EV_2022):
       ret.flags |= HyundaiFlags.ALT_LIMITS.value
       ret.safetyConfigs[-1].safetyParam |= Panda.FLAG_HYUNDAI_ALT_LIMITS
-
+    if candidate in NON_SCC_CAR:
+      ret.safetyConfigs[0].safetyParam |= Panda.FLAG_HYUNDAI_NON_SCC
     ret.centerToFront = ret.wheelbase * 0.4
 
     # TODO: start from empirically derived lateral slip stiffness for the civic and scale by

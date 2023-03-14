@@ -65,6 +65,7 @@ class HyundaiFlags(IntFlag):
   SP_ENHANCED_SCC = 512
   SP_CAN_LFA_BTN = 1024
   SP_NAV_MSG = 2048
+  NON_SCC = 4096
 
 
 class CAR:
@@ -100,6 +101,7 @@ class CAR:
 
   # Kia
   KIA_FORTE = "KIA FORTE E 2018 & GT 2021"
+  KIS_FORTE_2019_NON_SCC = "KIA FORTE E 2019 (NON SCC)"
   KIA_K5_2021 = "KIA K5 2021"
   KIA_K5_HEV_2020 = "KIA K5 HYBRID 2020"
   KIA_NIRO_EV = "KIA NIRO EV 2020"
@@ -198,6 +200,7 @@ CAR_INFO: Dict[str, Optional[Union[HyundaiCarInfo, List[HyundaiCarInfo]]]] = {
 
   # Kia
   CAR.KIA_FORTE: HyundaiCarInfo("Kia Forte 2019-21", harness=Harness.hyundai_g),
+  CAR.KIA_FORTE_2019_NON_SCC: HyundaiCarInfo("Kia Forte 2019 (NON SCC)", harness=Harness.hyundai_b)
   CAR.KIA_K5_2021: HyundaiCarInfo("Kia K5 2021-22", harness=Harness.hyundai_a),
   CAR.KIA_K5_HEV_2020: HyundaiCarInfo("Kia K5 Hybrid 2020", harness=Harness.hyundai_a),
   CAR.KIA_NIRO_EV: [
@@ -1678,7 +1681,7 @@ EV_CAR = {CAR.IONIQ_EV_2020, CAR.IONIQ_EV_LTD, CAR.KONA_EV, CAR.KIA_NIRO_EV, CAR
 # these cars require a special panda safety mode due to missing counters and checksums in the messages
 LEGACY_SAFETY_MODE_CAR = {CAR.HYUNDAI_GENESIS, CAR.IONIQ_EV_2020, CAR.IONIQ_EV_LTD, CAR.IONIQ_PHEV, CAR.IONIQ, CAR.KONA_EV, CAR.KIA_SORENTO, CAR.SONATA_LF, CAR.KIA_OPTIMA_G4, CAR.KIA_OPTIMA_G4_FL, CAR.VELOSTER,
                           CAR.GENESIS_G70, CAR.GENESIS_G80, CAR.KIA_CEED, CAR.ELANTRA, CAR.IONIQ_HEV_2022}
-
+NON_SCC_CAR = {CAR.KIA_FORTE_2019_NON_SCC}
 # If 0x500 is present on bus 1 it probably has a Mando radar outputting radar points.
 # If no points are outputted by default it might be possible to turn it on using  selfdrive/debug/hyundai_enable_radar_points.py
 DBC = {
