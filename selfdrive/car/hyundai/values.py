@@ -1700,6 +1700,7 @@ DBC = {
   CAR.IONIQ: dbc_dict('hyundai_kia_generic', None),
   CAR.IONIQ_HEV_2022: dbc_dict('hyundai_kia_generic', None),
   CAR.KIA_FORTE: dbc_dict('hyundai_kia_generic', None),
+  CAR.KIA_FORTE_2019_NON_SCC: dbc_dict('hyundai_kia_generic', None),
   CAR.KIA_K5_2021: dbc_dict('hyundai_kia_generic', None),
   CAR.KIA_K5_HEV_2020: dbc_dict('hyundai_kia_generic', 'hyundai_kia_mando_front_radar_generated'),
   CAR.KIA_NIRO_EV: dbc_dict('hyundai_kia_generic', 'hyundai_kia_mando_front_radar_generated'),
